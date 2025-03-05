@@ -16,7 +16,11 @@ from utils import load_jsonl
 from python_executor import PythonExecutor
 
 def evaluate(benchmark: str, dataset_id: str, dataset_config: str = None, dataset_split: str = "test", dataset_col: str = "pred", samples: list=None, max_num_samples=None):
-    samples = load_dataset(dataset_id, name=dataset_config, split=dataset_split)
+    # Global way
+    # samples = load_dataset(dataset_id, name=dataset_config, split=dataset_split)
+    # Local way
+    samples = load_dataset("json", data_files="/home/hossamamer/TTC_workspace/search-and-learn/data/meta-llama/Llama-3.2-1B-Instruct/best_of_n_completions.jsonl",
+    split=dataset_split)
     if "idx" not in samples.column_names:
         samples = samples.map(lambda x, idx: {"idx": idx}, with_indices=True)
         
@@ -28,10 +32,10 @@ def evaluate(benchmark: str, dataset_id: str, dataset_config: str = None, datase
     def parse_gt(x):
         x['gt_cot'], x['gt'] = parse_ground_truth(x, benchmark)
         return x
+
     samples = samples.map(parse_gt, desc="Parsing ground truth", num_proc=12, load_from_cache_file=False)
     samples = samples.map(extract_answer_map, fn_kwargs={"data_name": benchmark, "col": dataset_col}, desc="Parsing predictions", num_proc=12, load_from_cache_file=False)
     params = [(idx, pred, gt) for idx, pred, gt in zip(samples['idx'], samples['pred'], samples['gt'])]
-
     scores = []
     timeout_cnt = 0 
 
@@ -111,5 +115,10 @@ if __name__ == "__main__":
 
     # Save results
     ds = Dataset.from_dict(data)
-    url = ds.push_to_hub(args.dataset_id, config_name=f"{args.dataset_config}--evals")
-    print(f"Results pushed to {url}")
+    print(ds)
+
+    df = ds.to_pandas()
+    print(df)
+    # url = ds.push_to_hub(args.dataset_id, config_name=f"{args.dataset_config}--evals")
+    # print(f"Results pushed to {url}")
+    print("Done")
