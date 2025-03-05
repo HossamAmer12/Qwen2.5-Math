@@ -25,8 +25,12 @@
 
 # Best of N you created for LLama-3.2-1B
 # hub dataset repo
-export DATASET_ID="HuggingFaceH4/Llama-3.2-1B-Instruct-best-of-N-completions"
-# export DATASET_ID="/home/hossamamer/TTC_workspace/search-and-learn/data/meta-llama/Llama-3.2-1B-Instruct/best_of_n_completions.jsonl"
+# export DATASET_ID="HuggingFaceH4/Llama-3.2-1B-Instruct-best-of-N-completions"
+export DATASET_ID="/home/hossamamer/TTC_workspace/search-and-learn/data/meta-llama/Llama-3.2-1B-Instruct/best_of_n_completions.jsonl"
+
+
+# export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/home/k00925509/model_weights/tinyllama/best_of_n_completions.jsonl"
+
 # config to evaluate
 export DATASET_CONFIG="HuggingFaceH4_MATH-500--T-0.8--top_p-1.0--n-1024--max_tokens-2048--bsz-8--seed-0--agg_strategy-last"
 # preds@N to evaluate

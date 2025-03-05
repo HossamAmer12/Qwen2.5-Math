@@ -16,11 +16,15 @@ from utils import load_jsonl
 from python_executor import PythonExecutor
 
 def evaluate(benchmark: str, dataset_id: str, dataset_config: str = None, dataset_split: str = "test", dataset_col: str = "pred", samples: list=None, max_num_samples=None):
-    # Global way
-    # samples = load_dataset(dataset_id, name=dataset_config, split=dataset_split)
-    # Local way
-    samples = load_dataset("json", data_files="/home/hossamamer/TTC_workspace/search-and-learn/data/meta-llama/Llama-3.2-1B-Instruct/best_of_n_completions.jsonl",
-    split=dataset_split)
+    
+    if ".json" in dataset_id:
+        # Local way
+        samples = load_dataset("json", data_files=dataset_id, split=dataset_split)
+    else:
+        # Global way
+        samples = load_dataset(dataset_id, name=dataset_config, split=dataset_split)
+    
+    
     if "idx" not in samples.column_names:
         samples = samples.map(lambda x, idx: {"idx": idx}, with_indices=True)
         
