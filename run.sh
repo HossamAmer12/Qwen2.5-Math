@@ -37,7 +37,8 @@
 # export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/home/hossamamer/.cache/huggingface/hub/models--TinyLlama--TinyLlama_v1.1_math_code/snapshots/698ef988e06730a38eca552cdf86e99c08118df5/best_of_n_completions.jsonl"
 
 # LLama-3.2-1B 500 examples BoN
-export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/meta-llama/Llama-3.2-1B-Instruct/best_of_n_completions.jsonl"
+# export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/meta-llama/Llama-3.2-1B-Instruct/best_of_n_completions.jsonl"
+export DATASET_ID="sample_best_of_n_json_basic/best_of_n_completions_all.jsonl"
 
 
 # config to evaluate

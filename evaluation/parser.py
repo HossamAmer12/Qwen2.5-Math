@@ -829,5 +829,131 @@ When we subtracted $7$ from $\frac{386}{64}$, we should have subtracted $7 \cdot
     # should output a dict
 
 
+### pass@K
+import signal
+from multiprocessing import Manager
+from sympy import latex, simplify
+
+# Timeout exception
+class TimeoutException(Exception):
+    pass
+
+
+# Signal handler for timeout
+def timeout_handler(signum, frame):
+    raise TimeoutException
+
+manager = Manager()
+shared_cache = manager.dict()
+
+def memoized_canonical_form(expression: str, timeout_seconds: int = 3) -> str:
+    """
+    Compute a canonical form for a mathematical expression using sympy.
+    Uses a shared cache across processes for memoization.
+
+    Args:
+        expression (str): A LaTeX-formatted mathematical expression.
+        timeout_seconds (int): Timeout duration in seconds.
+
+    Returns:
+        str: The canonical form of the expression or the original expression as fallback.
+    """
+    # Check if the result is already cached
+    if expression in shared_cache:
+        return shared_cache[expression]
+
+    try:
+        # Set up the timeout handler
+        signal.signal(signal.SIGALRM, timeout_handler)
+        signal.alarm(timeout_seconds)
+
+        # Parse and simplify the mathematical expression
+        parsed_expr = latex2sympy(expression)
+        simplified_expr = simplify(parsed_expr)
+
+        # Reset the alarm
+        signal.alarm(0)
+
+        canonical_form = latex(simplified_expr)  # Convert back to a string
+        shared_cache[expression] = canonical_form  # Cache the result
+        return canonical_form
+    except TimeoutException:
+        # Fallback: Use a stripped version of the input on timeout
+        fallback = strip_string(expression)
+        shared_cache[expression] = fallback  # Cache the fallback result
+        return fallback
+    except Exception:
+        # Fallback: Use a stripped version of the input on other errors
+        fallback = strip_string(expression)
+        shared_cache[expression] = fallback  # Cache the fallback result
+        return fallback
+    finally:
+        # Ensure the alarm is turned off
+        signal.alarm(0)
+
+
+def pass_at_k(n: int, c: int, k: int) -> float:
+    """A numerically stable method for calculating an unbiased estimate of pass@k.
+
+    Taken from OpenAI's Codex paper: https://arxiv.org/abs/2107.03374
+
+    Args:
+        n (`int`): total number of samples
+        c (`int`): number of correct samples
+        k (`int`): k in pass@$k$
+
+    Returns:
+        `float`: an unbiased estimate of pass@k
+    """
+    if n - c < k:
+        return 1.0
+    return 1.0 - np.prod(1.0 - k / np.arange(n - c + 1, n + 1))
+
+def compute_pass_at_k(x, k):
+    """
+    Computes pass@k for predictions, using canonical forms to group and compare answers.
+
+    Args:
+        x (dict): A dictionary containing "preds" (list of predictions) and "answer" (correct answer).
+        k (int): The cutoff for pass@k.
+
+    Returns:
+        dict: A dictionary containing pass@k results.
+    """
+    
+    # print("Debug hossam")
+    # # print(x)
+    # print("---------------")
+    # # print(x['pred'])
+    # print("---------------")
+    # #print(x['preds'])
+    # print(x['answer'])
+    # exit(0)
+    # Hossam preds are pred in the dictionary
+    # n = len(x["preds"])
+    n = len(x["pred"])
+    if n == 0:
+        raise ValueError("No predictions found")
+    if x["answer"] == "":
+        raise ValueError("Answer is empty")
+
+    # Compute the canonical form of the correct answer
+    canonical_answer = memoized_canonical_form(x["answer"])
+
+    # Compute the count of predictions matching the canonical answer
+    # c = sum(memoized_canonical_form(pred) == canonical_answer for pred in x["preds"])
+    c = sum(memoized_canonical_form(pred) == canonical_answer for pred in x["pred"])
+
+    ### debugggg
+    # for ipred, pred in enumerate(x['pred']):
+    #     if memoized_canonical_form(pred) == canonical_answer:
+    #         print("------ipred=%d n=%d c = %d k = %d------->" % (ipred, n, c, k))
+    #         print(x['problem'])
+    #         print(memoized_canonical_form(pred), canonical_answer)
+    #         print(pred)
+
+    # Calculate pass@k
+    return {f"pass@{k}": pass_at_k(n, c, k)}
+
 if __name__ == "__main__":
     _test_extract_answer()

@@ -64,15 +64,16 @@ def evaluate(benchmark: str, dataset_id: str, dataset_config: str = None, datase
 
     mean_score = np.mean(scores) * 100
 
+
     result_json = {
         "num_samples": len(samples),
         "num_scores": len(scores),
         "timeout_samples": timeout_cnt,
-        "acc": mean_score
+        "acc": mean_score,
     }
 
     print(result_json)
-    return samples, result_json
+    return samples, result_json, scores
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -87,12 +88,17 @@ def parse_args():
 
 if __name__ == "__main__":
     args = parse_args()
-    data = {"n": [], "acc_naive": [], "acc_weighted": [], "acc_maj": []}
+    # data = {"n": [], "acc_naive": [], "acc_weighted": [], "acc_maj": []}
+    data = {"n": [], "acc_naive": [], "acc_weighted": [], "acc_maj": [], "acc_cts": []}
 
     def evaluate_for_n(n):
-        local_data = {"n": n, "acc_naive": None, "acc_weighted": None, "acc_maj": None}
-        for agg in ["naive", "weighted", "maj"]:
-            _, scores = evaluate(
+        # local_data = {"n": n, "acc_naive": None, "acc_weighted": None, "acc_maj": None}
+        local_data = {"n": n, "acc_naive": None, "acc_weighted": None, "acc_maj": None, "acc_cts":  None}
+        
+        # Hossam define the equality table
+        equality_table = [[], [], []]
+        for iagg, agg in enumerate(["naive", "weighted", "maj"]):
+            _, scores, cur_equality_table = evaluate(
                 benchmark=args.benchmark,
                 dataset_id=args.dataset_id,
                 dataset_config=args.dataset_config,
@@ -101,6 +107,17 @@ if __name__ == "__main__":
                 max_num_samples=args.max_num_samples,
             )
             local_data[f"acc_{agg}"] = scores["acc"]
+            equality_table[iagg] = cur_equality_table
+        
+        # Hossam
+        # Compute the best result among the all equality tables
+        # if one is true, then the result is true
+        for j in range(1, len(equality_table[0])):
+            equality_table[0][j] = equality_table[0][j] | equality_table[1][j] | equality_table[2][j] 
+        
+        scores_cts = equality_table[0]
+        mean_score_cts = np.mean(scores_cts) * 100
+        local_data[f"acc_cts"] = mean_score_cts
         return local_data
 
     with ProcessPoolExecutor() as executor:
@@ -113,6 +130,7 @@ if __name__ == "__main__":
                     data["acc_naive"].append(result["acc_naive"])
                     data["acc_weighted"].append(result["acc_weighted"])
                     data["acc_maj"].append(result["acc_maj"])
+                    data["acc_cts"].append(result["acc_cts"])
                 except Exception as e:
                     print(f"Error processing n={futures[future]}: {e}")
                 progress_bar.update(1)
