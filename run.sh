@@ -34,7 +34,10 @@
 # export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/home/k00925509/model_weights/tinyllama/best_of_n_completions.jsonl"
 
 # TinyLlama 1B math code
-export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/home/hossamamer/.cache/huggingface/hub/models--TinyLlama--TinyLlama_v1.1_math_code/snapshots/698ef988e06730a38eca552cdf86e99c08118df5/best_of_n_completions.jsonl"
+# export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/home/hossamamer/.cache/huggingface/hub/models--TinyLlama--TinyLlama_v1.1_math_code/snapshots/698ef988e06730a38eca552cdf86e99c08118df5/best_of_n_completions.jsonl"
+
+# LLama-3.2-1B 500 examples BoN
+export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/meta-llama/Llama-3.2-1B-Instruct/best_of_n_completions.jsonl"
 
 
 # config to evaluate
