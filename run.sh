@@ -38,13 +38,15 @@
 
 # LLama-3.2-1B 500 examples BoN
 # export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/meta-llama/Llama-3.2-1B-Instruct/best_of_n_completions.jsonl"
-export DATASET_ID="sample_best_of_n_json_basic/best_of_n_completions_all.jsonl"
+# export DATASET_ID="sample_best_of_n_json_basic/best_of_n_completions_all.jsonl"
 
+# Llama-3.2-1B 500 examples Pass@k
+export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/meta-llama/Llama-3.2-1B-Instruct/best_of_n_completions.jsonl"
 
 # config to evaluate
 export DATASET_CONFIG="HuggingFaceH4_MATH-500--T-0.8--top_p-1.0--n-1024--max_tokens-2048--bsz-8--seed-0--agg_strategy-last"
 # preds@N to evaluate
-export VOTING_N="1 2 4 16 32 64"
+export VOTING_N="1 2 4 16 32 64 128 256"
 
 # Run the evaluation script
 python evaluation/evaluate_hf.py \

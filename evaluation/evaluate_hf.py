@@ -37,7 +37,7 @@ def evaluate(benchmark: str, dataset_id: str, dataset_config: str = None, datase
         x['gt_cot'], x['gt'] = parse_ground_truth(x, benchmark)
         return x
 
-    samples = samples.map(parse_gt, desc="Parsing ground truth", num_proc=12, load_from_cache_file=False)
+    samples = samples.map(parse_gt, desc="Parsing ground truth", num_proc=12, load_from_cache_file=False)    
     samples = samples.map(extract_answer_map, fn_kwargs={"data_name": benchmark, "col": dataset_col}, desc="Parsing predictions", num_proc=12, load_from_cache_file=False)
     params = [(idx, pred, gt) for idx, pred, gt in zip(samples['idx'], samples['pred'], samples['gt'])]
     scores = []
@@ -64,7 +64,6 @@ def evaluate(benchmark: str, dataset_id: str, dataset_config: str = None, datase
 
     mean_score = np.mean(scores) * 100
 
-
     result_json = {
         "num_samples": len(samples),
         "num_scores": len(scores),
@@ -72,7 +71,7 @@ def evaluate(benchmark: str, dataset_id: str, dataset_config: str = None, datase
         "acc": mean_score,
     }
 
-    print(result_json)
+    print(dataset_col, result_json)
     return samples, result_json, scores
 
 def parse_args():
@@ -89,35 +88,57 @@ def parse_args():
 if __name__ == "__main__":
     args = parse_args()
     # data = {"n": [], "acc_naive": [], "acc_weighted": [], "acc_maj": []}
-    data = {"n": [], "acc_naive": [], "acc_weighted": [], "acc_maj": [], "acc_cts": []}
+    # data = {"n": [], "acc_naive": [], "acc_weighted": [], "acc_maj": [], "acc_cts": []}
+    data = {"n": [], "acc_baseline": [], "acc_pass@k": [], "acc_maj": []}
+    
 
     def evaluate_for_n(n):
         # local_data = {"n": n, "acc_naive": None, "acc_weighted": None, "acc_maj": None}
-        local_data = {"n": n, "acc_naive": None, "acc_weighted": None, "acc_maj": None, "acc_cts":  None}
+        local_data = {"n": n, "acc_baseline": None, "acc_pass@k": None, "acc_maj": None}
         
         # Hossam define the equality table
-        equality_table = [[], [], []]
-        for iagg, agg in enumerate(["naive", "weighted", "maj"]):
-            _, scores, cur_equality_table = evaluate(
-                benchmark=args.benchmark,
-                dataset_id=args.dataset_id,
-                dataset_config=args.dataset_config,
-                dataset_split=args.dataset_split,
-                dataset_col=f"pred_{agg}@{n}",
-                max_num_samples=args.max_num_samples,
-            )
+        for iagg, agg in enumerate(["baseline", "pass@k", "maj"]):
+
+            if agg == "baseline":
+                _, scores, cur_equality_table = evaluate(
+                    benchmark=args.benchmark,
+                    dataset_id=args.dataset_id,
+                    dataset_config=args.dataset_config,
+                    dataset_split=args.dataset_split,
+                    dataset_col=f"pred_{agg}",
+                    max_num_samples=args.max_num_samples,
+                )
+            elif agg == "pass@k":
+                _, scores, cur_equality_table = evaluate(
+                    benchmark=args.benchmark,
+                    dataset_id=args.dataset_id,
+                    dataset_config=args.dataset_config,
+                    dataset_split=args.dataset_split,
+                    dataset_col=f"pred_pass@{n}",
+                    max_num_samples=args.max_num_samples,
+                )
+            else:
+                _, scores, cur_equality_table = evaluate(
+                    benchmark=args.benchmark,
+                    dataset_id=args.dataset_id,
+                    dataset_config=args.dataset_config,
+                    dataset_split=args.dataset_split,
+                    dataset_col=f"pred_{agg}@{n}",
+                    max_num_samples=args.max_num_samples,
+                )
+
             local_data[f"acc_{agg}"] = scores["acc"]
-            equality_table[iagg] = cur_equality_table
+            # equality_table[iagg] = cur_equality_table
         
         # Hossam
         # Compute the best result among the all equality tables
         # if one is true, then the result is true
-        for j in range(1, len(equality_table[0])):
-            equality_table[0][j] = equality_table[0][j] | equality_table[1][j] | equality_table[2][j] 
+        # for j in range(1, len(equality_table[0])):
+        #     equality_table[0][j] = equality_table[0][j] | equality_table[1][j] | equality_table[2][j] 
         
-        scores_cts = equality_table[0]
-        mean_score_cts = np.mean(scores_cts) * 100
-        local_data[f"acc_cts"] = mean_score_cts
+        # scores_cts = equality_table[0]
+        # mean_score_cts = np.mean(scores_cts) * 100
+        # local_data[f"acc_cts"] = mean_score_cts
         return local_data
 
     with ProcessPoolExecutor() as executor:
@@ -127,10 +148,9 @@ if __name__ == "__main__":
                 try:
                     result = future.result()
                     data["n"].append(result["n"])
-                    data["acc_naive"].append(result["acc_naive"])
-                    data["acc_weighted"].append(result["acc_weighted"])
+                    data["acc_baseline"].append(result["acc_baseline"])
+                    data["acc_pass@k"].append(result["acc_pass@k"])
                     data["acc_maj"].append(result["acc_maj"])
-                    data["acc_cts"].append(result["acc_cts"])
                 except Exception as e:
                     print(f"Error processing n={futures[future]}: {e}")
                 progress_bar.update(1)
