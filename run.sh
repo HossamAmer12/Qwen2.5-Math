@@ -38,7 +38,18 @@
 
 # LLama-3.2-1B 500 examples BoN
 # export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/meta-llama/Llama-3.2-1B-Instruct/best_of_n_completions.jsonl"
-export DATASET_ID="sample_best_of_n_json_basic/best_of_n_completions_all.jsonl"
+# export DATASET_ID="sample_best_of_n_json_basic/best_of_n_completions_all.jsonl"
+
+
+# dvts for tiny llama 100 checkpoint
+# export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/home/m00918254/TTC-checkpoints/tinyllama-math-code-checkpoint-100/dvts_math500_beam2/output/dvts_completions.jsonl"
+# export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/home/m00918254/TTC-checkpoints/tinyllama-math-code-checkpoint-200/dvts_math500_beam2/output/dvts_completions.jsonl"
+# export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/home/m00918254/TTC-checkpoints/tinyllama-math-code-checkpoint-300/dvts_math500_beam2/output/dvts_completions.jsonl"
+
+# aime
+# export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/home/m00918254/TTC-checkpoints/tinyllama-math-code-checkpoint-100/dvts_aime_beam2/output/dvts_completions.jsonl"
+# export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/home/m00918254/TTC-checkpoints/tinyllama-math-code-checkpoint-200/dvts_aime_beam2/output/dvts_completions.jsonl"
+export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/home/m00918254/TTC-checkpoints/tinyllama-math-code-checkpoint-300/dvts_aime_beam2/output/dvts_completions.jsonl"
 
 
 # config to evaluate
