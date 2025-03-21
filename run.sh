@@ -49,7 +49,10 @@
 # aime
 # export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/home/m00918254/TTC-checkpoints/tinyllama-math-code-checkpoint-100/dvts_aime_beam2/output/dvts_completions.jsonl"
 # export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/home/m00918254/TTC-checkpoints/tinyllama-math-code-checkpoint-200/dvts_aime_beam2/output/dvts_completions.jsonl"
-export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/home/m00918254/TTC-checkpoints/tinyllama-math-code-checkpoint-300/dvts_aime_beam2/output/dvts_completions.jsonl"
+# export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/home/m00918254/TTC-checkpoints/tinyllama-math-code-checkpoint-300/dvts_aime_beam2/output/dvts_completions.jsonl"
+
+# tinyllama checkpoints
+export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/home/m00918254/TTC-checkpoints/tinyllama-sft-prm800/from-checkpoint-5000/checkpoint-240/output/dvts_completions.jsonl"
 
 
 # config to evaluate
