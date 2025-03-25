@@ -53,6 +53,8 @@
 # TinyLlama checkpoint-300 500 examples Pass@k
 export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/home/m00918254/TTC-checkpoints/tinyllama-math-code-checkpoint-300/best_of_n_completions_300.jsonl"
 
+export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/home/m00918254/TTC-checkpoints/tinyllama-sft-prm800/from-checkpoint-20000/output/dvts_completions.jsonl"
+
 # config to evaluate
 export DATASET_CONFIG="HuggingFaceH4_MATH-500--T-0.8--top_p-1.0--n-1024--max_tokens-2048--bsz-8--seed-0--agg_strategy-last"
 # preds@N to evaluate
