@@ -89,15 +89,15 @@ if __name__ == "__main__":
     args = parse_args()
     # data = {"n": [], "acc_naive": [], "acc_weighted": [], "acc_maj": []}
     # data = {"n": [], "acc_naive": [], "acc_weighted": [], "acc_maj": [], "acc_cts": []}
-    data = {"n": [], "acc_baseline": [], "acc_pass@k": [], "acc_maj": []}
+    data = {"n": [], "acc_baseline": []}
     
 
     def evaluate_for_n(n):
         # local_data = {"n": n, "acc_naive": None, "acc_weighted": None, "acc_maj": None}
-        local_data = {"n": n, "acc_baseline": None, "acc_pass@k": None, "acc_maj": None}
+        local_data = {"n": n, "acc_baseline": None}
         
         # Hossam define the equality table
-        for iagg, agg in enumerate(["baseline", "pass@k", "maj"]):
+        for iagg, agg in enumerate(["baseline"]):
 
             if agg == "baseline":
                 _, scores, cur_equality_table = evaluate(
@@ -149,8 +149,8 @@ if __name__ == "__main__":
                     result = future.result()
                     data["n"].append(result["n"])
                     data["acc_baseline"].append(result["acc_baseline"])
-                    data["acc_pass@k"].append(result["acc_pass@k"])
-                    data["acc_maj"].append(result["acc_maj"])
+                    # data["acc_pass@k"].append(result["acc_pass@k"])
+                    # data["acc_maj"].append(result["acc_maj"])
                 except Exception as e:
                     print(f"Error processing n={futures[future]}: {e}")
                 progress_bar.update(1)
