@@ -57,10 +57,13 @@ export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data
 
 export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/meta-llama/Llama-3.2-1B-Instruct/dvts_completions_0_500_baseline.jsonl"
 
+export DATASET_ID="/home/hossamamer/TTC_workspace/search-and-learn/data/data00/maryam/saved_models/tinyllama-sft-prm800/from-checkpoint-5000/dvts_completions_0_500_baseline.jsonl"
+export DATASET_ID="/home/hossamamer/TTC_workspace/search-and-learn/data/data00/maryam/saved_models/tinyllama-sft-prm800/from-checkpoint-31908/dvts_completions_0_500_baseline.jsonl"
+
 # config to evaluate
 export DATASET_CONFIG="HuggingFaceH4_MATH-500--T-0.8--top_p-1.0--n-1024--max_tokens-2048--bsz-8--seed-0--agg_strategy-last"
 # preds@N to evaluate
-export VOTING_N="1 2 4 16 32 64 128 256"
+export VOTING_N="1 2"
 
 # Run the evaluation script
 python evaluation/evaluate_hf.py \
