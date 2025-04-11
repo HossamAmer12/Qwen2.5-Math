@@ -55,6 +55,14 @@ export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data
 
 export DATASET_ID="/home/hossamamer/TTC_workspace/my_repos/search-and-learn/data/home/m00918254/TTC-checkpoints/tinyllama-sft-prm800/from-checkpoint-20000/output/dvts_completions.jsonl"
 
+export DATASET_ID="/home/hossamamer/TTC_workspace/search-and-learn/data/data00/maryam/saved_models/tinyllama-sft-prm800/TinyLlama_math_code_baseline_enlarged/checkpoint-834/output/dvts_completions.jsonl"
+
+# export DATASET_ID="/home/hossamamer/TTC_workspace/search-and-learn/data/data00/maryam/saved_models/tinyllama-sft-prm800/TinyLlama_math_code_baseline_enlarged/checkpoint-834/output/dvts_completions.jsonl"
+
+# export DATASET_ID="/home/hossamamer/TTC_workspace/search-and-learn/data/data00/dataset/finemath/finemath-llama3b/10B/models--HuggingFaceTB--finemath-ablation-finemath-4plus/snapshots/f3be85d2df204cf454cfd06657b7b0c788ceedb1/output/dvts_completions.jsonl"
+
+export DATASET_ID="/home/hossamamer/TTC_workspace/search-and-learn/data/data00/dataset/finemath/finemath-llama3b/50B/models--HuggingFaceTB--finemath-ablation-finemath-4plus/snapshots/49c2b41df57e3e65368f7e2ccdcd50ec3fe88ba8//output/dvts_completions.jsonl"
+
 # config to evaluate
 export DATASET_CONFIG="HuggingFaceH4_MATH-500--T-0.8--top_p-1.0--n-1024--max_tokens-2048--bsz-8--seed-0--agg_strategy-last"
 # preds@N to evaluate
